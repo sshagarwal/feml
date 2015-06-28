@@ -1,0 +1,18 @@
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+<dialog id="newAccount"
+            xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul"
+            title="New Feml Account"
+            onload="onLoad();"
+            buttons="accept,cancel"
+            ondialogaccept="onAccept();"
+            ondialogcancel="onCancel();"
+            >
+  <script type="application/javascript" src="chrome://feml/content/newAccount.js"/>
+  <vbox id="femlOverlay">
+     <label value="Folder Email"/>
+     <label value="Account Name" control="accName"/>
+     <textbox id="accName" size="40"/>
+     <label value="Folder path" control="fpath"/>
+     <textbox id="fPath" size="40"/>
+  </vbox>
+</dialog>

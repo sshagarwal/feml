@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE overlay [
+<!ENTITY % am-ewsDTD SYSTEM "chrome://feml/locale/am-feml.dtd" >
+%am-ewsDTD;
+<!ENTITY % AccountWizardDTD SYSTEM "chrome://messenger/locale/AccountManager.dtd" >
+%AccountWizardDTD;
+]>
+
+<overlay id='femlAMOverlay'
+         xmlns='http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul'>
+  <dialog id="accountManager">
+    <script type='application/javascript' src='chrome://feml/content/AccountManagerOverlay.js'/>
+  </dialog>
+  <menupopup id="accountActionsDropdown">
+    <menuitem id="feml-account" label="Add feml account"
+              accesskey="A" insertbefore="accountActionsDropdownSep1"
+              oncommand="feml.newAccountWindowOpen();"/>
+  </menupopup>
+
+</overlay>
