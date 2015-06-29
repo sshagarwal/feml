@@ -10,12 +10,14 @@ function cerr(e)
 }
 
 function IncomingServer() {
-  try{
+  try {
     //this.wrappedJSObject = this;
     Cu.reportError("In here");
     Cu.import("resource://feml/femlIncomingServer.jsm");
     FemlIncomingServer.call(this);
-  } catch(e) {cerr(e);}
+  } catch(e) {
+    cerr(e);
+  }
 }
 
 IncomingServer.prototype = {
@@ -32,11 +34,15 @@ IncomingServer.prototype = {
   }
 }
 
-function MsgProtocolInfo() { try{
-  Cu.import("resource://feml/twitterService.jsm");
-  Cu.reportError("protocol info import successful");
-  TwitterService.call(this);
-} catch(e) {cerr(e);}}
+function MsgProtocolInfo() {
+  try {
+    Cu.import("resource://feml/femlService.jsm");
+    Cu.reportError("protocol info import successful");
+    FemlService.call(this);
+  } catch(e) {
+    cerr(e);
+  }
+}
 
 MsgProtocolInfo.prototype = {
     classDescription: "Feml Server Protocol Info Service",
@@ -46,10 +52,11 @@ MsgProtocolInfo.prototype = {
 }
 
 function ResourceFactory() {
-  try{
-    Cu.import("resource://feml/twitterFolder.jsm");
+  try {
+    Cu.reportError("resource factory hit");
+    Cu.import("resource://feml/femlFolder.jsm");
     Cu.reportError("import success");
-    TwitterFolder.call(this);
+    FemlFolder.call(this);
   } catch(e) {
     cerr(e);
   }
@@ -67,7 +74,27 @@ ResourceFactory.prototype =
                                            Ci.msqISgMailFolder, Ci.msqISgJsOverride]),
 }
 
-var components = [IncomingServer, MsgProtocolInfo, ResourceFactory];
+
+function Url() {
+  try {
+    Cu.import("resource://feml/femlUrl.jsm");
+    Cu.reportError("url being hit!");
+    FemlUrl.call(this);
+  } catch(e) {
+    cerr(e);
+  }
+}
+
+Url.prototype =
+{
+  /// XPCOM glue
+  classDescription: "Feml Url",
+  classID:          Components.ID("{6C51C3A9-FC5E-4b97-AA47-7BF268C59AD2}"),
+  contractID:       "@mesquilla.com/sgurl;1?type=feml",
+  QueryInterface:   XPCOMUtils.generateQI([Ci.nsIMsgMailNewsUrl, Ci.nsIURI, Ci.nsIURL])
+}
+
+var components = [IncomingServer, MsgProtocolInfo, ResourceFactory, Url];
 
 if (XPCOMUtils.generateNSGetFactory)
   var NSGetFactory = XPCOMUtils.generateNSGetFactory(components);

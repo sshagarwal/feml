@@ -13,8 +13,8 @@ function onCancel()
 
 function onAccept()
 {
-dump("onaccept");
-Components.utils.reportError("I am here");
+  dump("onaccept");
+  Components.utils.reportError("I am here");
   try {
   let accountData = {
     type: "feml",

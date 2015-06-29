@@ -1,6 +1,5 @@
 var EXPORTED_SYMBOLS = ["FemlIncomingServer"];
 
-// Create a new twitter server, with an underlying nsIMsgIncomingServer base
 const Cc = Components.classes;
 const Ci = Components.interfaces;
 const Cu = Components.utils;
@@ -10,10 +9,6 @@ Cu.import("resource:///modules/XPCOMUtils.jsm");
 Cu.import("resource:///modules/gloda/log4moz.js");
 Cu.import("resource://feml/Utils.jsm");
 Utils.importLocally(this);
-//let log = Log4Moz.getConfiguredLogger("extensions.tweequilla");
-//var gStrings = Cc["@mozilla.org/intl/stringbundle;1"]
-//                .getService(Ci.nsIStringBundleService)
-//                .createBundle("chrome://tweequilla/locale/extension.properties");
 
 function FemlIncomingServer()
 {
@@ -34,12 +29,12 @@ function FemlIncomingServer()
   this.__proto__.__proto__ = server;
 
   // define the overrides
-  this.jsServer = new TwitterIncomingServerOverride(server);
+  this.jsServer = new FemlIncomingServerOverride(server);
   server.jsParent = this.jsServer;
   server.override("msqSgIncomingServerOverridable::GetNewMessages");
   server.override("msqSgIncomingServerOverridable::PerformBiff");
   server.override("msqSgIncomingServerOverridable::GetLocalPath");
-  server.override("msqSgIncomingServerOverridable::GetRootFolder");
+  //server.override("msqSgIncomingServerOverridable::GetRootFolder");
   server.override("msqSgIncomingServerOverridable::GetServerRequiresPasswordForBiff");
   server.override("msqSgIncomingServerOverridable::GetCanSearchMessages");
   server.override("msqSgIncomingServerOverridable::GetCanHaveFilters");
@@ -47,7 +42,7 @@ function FemlIncomingServer()
   server.override("msqSgIncomingServerOverridable::SetKey");
 
   // initializations
-  server.saveLocalStoreType("twitter");
+  server.saveLocalStoreType("feml");
   // server.saveAccountManagerChrome("am-serverwithnoidentities.xul");
 
   } catch(e) {
@@ -55,19 +50,19 @@ function FemlIncomingServer()
   }
 }
 
-function TwitterIncomingServerOverride(aIncomingServer) {
+function FemlIncomingServerOverride(aIncomingServer) {
   try {
     // initialization of member variables
     this.wrappedJSObject = this;
     this.baseServer = aIncomingServer;
-    Cu.import("resource://feml/twitterStore.jsm");
-    this._msgStore = new TwitterStore;
+    Cu.import("resource://feml/femlStore.jsm");
+    this._msgStore = new FemlStore;
   } catch (e) {
     re(e);
   }
 }
 
-TwitterIncomingServerOverride.prototype = 
+FemlIncomingServerOverride.prototype = 
 {
   QueryInterface:   XPCOMUtils.generateQI([Ci.nsIMsgIncomingServer]),
 
@@ -175,15 +170,15 @@ TwitterIncomingServerOverride.prototype =
   get msgStore()
   {
     return this._msgStore;
-  },
+  }
 
-  get rootFolder()
+ /* get rootFolder()
   {
     Cu.import("resource://feml/twitterFolder.jsm");
     Cu.reportError("folder import success");
     TwitterFolder.call(this);
     return TwitterFolder.rootFolder;
-  }
+  }*/
 }
 
 // json pretty print from http://stackoverflow.com/questions/130404/javascript-data-formatting-pretty-printer

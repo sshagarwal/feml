@@ -6,16 +6,9 @@ overlay  chrome://messenger/content/AccountManager.xul chrome://feml/content/Acc
 component {14E58292-3341-4642-A55D-4649609B3819} components/femlSkinkGlue.js
 component {13a9e741-e9a6-4975-8039-4328d1112864} components/femlSkinkGlue.js
 component {aa206cec-1e7b-4d6c-a979-038623944429} components/femlSkinkGlue.js
-component {23BA7D0B-0DC2-48d1-AD03-02AC35707618} components/femlSkinkGlue.js
-component {7D03740F-D990-44db-AFB1-77C7F005330A} componetns/femlSkinkGlue.js
-component {DCE1D1D4-9A57-4a01-915B-86CAE416CEE0} components/femlSkinkGlue.js
-component {852415D6-724F-453e-9967-FC4775C1A614} components/femlSkinkGlue.js
-
+component {6C51C3A9-FC5E-4b97-AA47-7BF268C59AD2} components/femlSkinkGlue.js
 
 contract @mozilla.org/rdf/resource-factory;1?name=feml {aa206cec-1e7b-4d6c-a979-038623944429}
 contract @mozilla.org/messenger/server;1?type=feml {14E58292-3341-4642-A55D-4649609B3819}
 contract @mozilla.org/messenger/protocol/info;1?type=feml {13a9e741-e9a6-4975-8039-4328d1112864}
-contract @mozilla.org/messenger/messageservice;1?type=feml {23BA7D0B-0DC2-48d1-AD03-02AC35707618}
-contract @mozilla.org/network/protocol;1?name=feml {7D03740F-D990-44db-AFB1-77C7F005330A}
-contract @mozilla.org/messenger/messageservice;1?type=feml-message {DCE1D1D4-9A57-4a01-915B-86CAE416CEE0}
-contract @mozilla.org/network/protocol;1?name=feml-message {852415D6-724F-453e-9967-FC4775C1A614}
+contract @mesquilla.com/sgurl;1?type=feml {6C51C3A9-FC5E-4b97-AA47-7BF268C59AD2}
