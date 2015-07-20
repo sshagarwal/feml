@@ -42,7 +42,7 @@ function FemlIncomingServer()
   server.override("msqSgIncomingServerOverridable::SetKey");
 
   // initializations
-  server.saveLocalStoreType("feml");
+  server.saveLocalStoreType("feml"); // feml
   // server.saveAccountManagerChrome("am-serverwithnoidentities.xul");
 
   } catch(e) {

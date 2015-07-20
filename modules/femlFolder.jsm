@@ -48,7 +48,6 @@ function FemlFolder()
   this.jsFolder = new FemlFolderOverride(folder);
   folder.jsParent = this.jsFolder;
   folder.override("msqSgMailFolderOverridable::UpdateFolder");
-  // folder.override("msqSgMailFolderOverridable::GetRootFolder");
   folder.override("msqSgMailFolderOverridable::GetSubFolders");
   folder.override("msqSgMailFolderOverridable::GetCanFileMessages");
   folder.override("msqSgMailFolderOverridable::GetCanDeleteMessages");
@@ -111,20 +110,16 @@ FemlFolderOverride.prototype =
     this.notifyFolderLoaded();
   } catch(e) {re(e);}},
 
- /* get rootFolder()
-  {
-    re("getting root");
-    return this.baseFolder.base.QueryInterface(Ci.nsIMsgFolder);
-  },*/
   get subFolders()
   {
-    Cu.reportError("I am in subfolders");
+    // Cu.reportError("I am in subfolders");
     try {
       let base = this.baseFolder.base.QueryInterface(Ci.nsIMsgFolder);
       if (base.isServer && this.needsBaseFolders)
       {
+Components.utils.reportError("querying sub folders");
         this.needsBaseFolders = false;
-        // this.makeStandardFolders(base);
+        this.makeStandardFolders(base);
         // Earlier versions allowed skink  to create a useless archive folder. Delete
         //  that if found
         try {
@@ -133,7 +128,7 @@ FemlFolderOverride.prototype =
           {
             base.propagateDelete(archive, true, null);
           }
-        } catch (e) {}
+        } catch (e) {re(e);}
       }
       return base.subFolders;
     } catch(e) {re(e);}
@@ -165,41 +160,36 @@ FemlFolderOverride.prototype =
   },
 
   // **** local methods
-  // create if needed standard Twitter folders
   makeStandardFolders: function _makeStandardFolders(aRootMsgFolder)
   { try {
-
     function makeFolder(aName, aTwitterAction)
     {
+Components.utils.reportError("making folder " + aName);
       let msgFolder;
-      try 
+      try
       {
         msgFolder = aRootMsgFolder.getChildNamed(aName);
-      } 
+      }
       catch (e)
       {
         try {
         msgFolder = aRootMsgFolder.addSubfolder(aName);
         msgFolder.setFlag(Ci.nsMsgFolderFlags.CheckNew);
+        if (aName == "Inbox")
+          msgFolder.setFlag(Ci.nsMsgFolderFlags.Inbox);
+        else if (aName == "Trash")
+          msgFolder.setFlag(Ci.nsMsgFolderFlags.Trash);
         } catch (ex) {
           Cu.reportError("Error " + ex);
         }
       }
-      msgFolder.setStringProperty("TwitterAction", aTwitterAction);
+      // msgFolder.setStringProperty("TwitterAction", aTwitterAction);
       msgFolder.prettyName = aName;
-
       return msgFolder;
     }
-      
-    //let sentMsgFolder = makeFolder("My Tweets", "UserTimeline");
-    //sentMsgFolder.setFlag(Ci.nsMsgFolderFlags.SentMail);
 
-    makeFolder("Timeline", "HomeTimeline");
-    makeFolder("Mentions", "Mentions");
-    makeFolder("Retweets of me", "RetweetsOfMe");
-    makeFolder("Retweeted by me", "RetweetedByMe");
-    makeFolder("My Lists", "Lists");
-    makeFolder("My Searches", "Searches");
+    makeFolder("Inbox", "InboxBox");
+    makeFolder("Trash", "TrashBox");
   } catch (e) {re(e);}},
 
   reconcileFolder: function _reconcileFolder(aJso)

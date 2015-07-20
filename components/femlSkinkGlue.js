@@ -27,7 +27,8 @@ IncomingServer.prototype = {
 
   // If SkinkGlue is not installed, then don't lie about the interface. This leads to bug 659606
   QueryInterface: XPCOMUtils.generateQI(
-                    Cc["@mesquilla.com/sgincomingserver;1"] ? [Ci.nsIMsgIncomingServer, Ci.msqISgIncomingServer] : []),
+                    Cc["@mesquilla.com/sgincomingserver;1"] ? 
+                      [Ci.nsISupportsWeakReference, Ci.nsIMsgIncomingServer, Ci.msqISgIncomingServer] : []),
 
   hello: function() {
     Components.utils.reportError("hello world");
@@ -71,7 +72,7 @@ ResourceFactory.prototype =
   QueryInterface:   XPCOMUtils.generateQI([Ci.nsIMsgFolder, Ci.nsIDBChangeListener,
                                            Ci.nsIUrlListener, Ci.nsIJunkMailClassificationListener,
                                            Ci.nsIMsgTraitClassificationListener, Ci.nsIRDFResource,
-                                           Ci.msqISgMailFolder, Ci.msqISgJsOverride]),
+                                           Ci.msqISgMailFolder, Ci.msqISgJsOverride, Ci.nsISupportsWeakReference]),
 }
 
 
