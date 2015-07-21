@@ -98,7 +98,7 @@ function re(error, ignore)
 // of this over just using the module export.
 function importLocally(scope)
 {
-  for (method in Utils)
+  for (let method in Utils)
   {
     if (typeof scope[method] == 'undefined')
       scope[method] = Utils[method];
@@ -137,7 +137,7 @@ function domWindow()
            .domWindow;
 }
 
-Utils = {
+var Utils = {
   se: se,
   re: re,
   AsyncDriver: AsyncDriver,

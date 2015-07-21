@@ -55,7 +55,6 @@ function FemlFolder()
   folder.override("msqSgMailFolderOverridable::GetCanRename");
   folder.override("msqSgMailFolderOverridable::GetCanCompact");
   folder.override("msqSgMailFolderOverridable::ApplyRetentionSettings");
-
 }
 
 function FemlFolderOverride(aFolder) {
@@ -88,7 +87,7 @@ FemlFolderOverride.prototype =
     let server = this.baseFolder.server;
     this.mNeedFolderLoadedEvent = true;
     server instanceof Ci.msqIOverride;
-    let twh = server.jsParent.wrappedJSObject.serverHelper;
+    //let twh = server.jsParent.wrappedJSObject.serverHelper;
 
     // todo: use the context only to pass context, not a new FolderListener instance?
     let listener = new FolderListener(this.baseFolder);
@@ -104,7 +103,8 @@ FemlFolderOverride.prototype =
     {
       try {
         action = this.baseFolder.getStringProperty("TwitterAction");
-      } catch(e) {}
+      } catch(e) { Cu.reportError("update folder error follows");
+                   re(e); }
     }
 
     this.notifyFolderLoaded();
@@ -164,6 +164,9 @@ Components.utils.reportError("querying sub folders");
   { try {
     function makeFolder(aName, aTwitterAction)
     {
+Cu.reportError("root: " + aRootMsgFolder.prettiestName);
+Cu.reportError("server: " + aRootMsgFolder.server.prettyName);
+Cu.reportError("server root: " + aRootMsgFolder.server.rootFolder.prettiestName);
 Components.utils.reportError("making folder " + aName);
       let msgFolder;
       try
@@ -174,11 +177,20 @@ Components.utils.reportError("making folder " + aName);
       {
         try {
         msgFolder = aRootMsgFolder.addSubfolder(aName);
-        msgFolder.setFlag(Ci.nsMsgFolderFlags.CheckNew);
-        if (aName == "Inbox")
+        //msgFolder = aRootMsgFolder.getChildNamed(aName);
+        //msgFolder.setFlag(Ci.nsMsgFolderFlags.CheckNew);
+        if (aName == "InboxBox") {
           msgFolder.setFlag(Ci.nsMsgFolderFlags.Inbox);
-        else if (aName == "Trash")
+Components.utils.reportError("set flag inbox");
+        } else if (aName == "TrashBox") {
+Components.utils.reportError("set flag trash");
           msgFolder.setFlag(Ci.nsMsgFolderFlags.Trash);
+        } else {
+          msgFolder.setFlag(Ci.nsMsgFolderFlags.CheckNew);
+        }
+        //aRootMsgFolder.NotifyItemAdded(msgFolder);
+        //aRootMsgFolder.addSubfolder(aName);
+        aRootMsgFolder.NotifyItemAdded(msgFolder);
         } catch (ex) {
           Cu.reportError("Error " + ex);
         }
@@ -188,9 +200,10 @@ Components.utils.reportError("making folder " + aName);
       return msgFolder;
     }
 
-    makeFolder("Inbox", "InboxBox");
-    makeFolder("Trash", "TrashBox");
-  } catch (e) {re(e);}},
+    makeFolder("InboxBox", "InboxBoxes");
+    makeFolder("TrashBox", "TrashBoxes");
+    makeFolder("NewFolder", "NewBoxes");
+  } catch (e) {Cu.reportError("I gave up"); re(e);}},
 
   reconcileFolder: function _reconcileFolder(aJso)
   {

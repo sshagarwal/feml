@@ -34,7 +34,6 @@ function FemlIncomingServer()
   server.override("msqSgIncomingServerOverridable::GetNewMessages");
   server.override("msqSgIncomingServerOverridable::PerformBiff");
   server.override("msqSgIncomingServerOverridable::GetLocalPath");
-  //server.override("msqSgIncomingServerOverridable::GetRootFolder");
   server.override("msqSgIncomingServerOverridable::GetServerRequiresPasswordForBiff");
   server.override("msqSgIncomingServerOverridable::GetCanSearchMessages");
   server.override("msqSgIncomingServerOverridable::GetCanHaveFilters");
@@ -42,7 +41,7 @@ function FemlIncomingServer()
   server.override("msqSgIncomingServerOverridable::SetKey");
 
   // initializations
-  server.saveLocalStoreType("feml"); // feml
+  server.saveLocalStoreType("feml");
   // server.saveAccountManagerChrome("am-serverwithnoidentities.xul");
 
   } catch(e) {
@@ -83,17 +82,17 @@ FemlIncomingServerOverride.prototype =
   getNewMessages: function _getNewMessages(aFolder, aMsgWindow, aUrlListener)
   { 
     try {
-      //dl('getNewMessages for folder ' + aFolder.name);
+      Cu.reportError('getNewMessages for folder ' + aFolder.name);
       let subfolders = Cc["@mozilla.org/supports-array;1"]
                          .createInstance(Ci.nsISupportsArray);
       aFolder.ListDescendents(subfolders);
-      //dl('found ' + subfolders.Count() + ' descendents');
+      Cu.reportError('found ' + subfolders.Count() + ' descendents');
       for (let index = 0; index < subfolders.Count(); index++)
       {
         let folder = subfolders.QueryElementAt(index, Ci.nsIMsgFolder);
         if (folder.getFlag(Ci.nsMsgFolderFlags.CheckNew))
         {
-          //dl('need to update folder ' + folder.name);
+          Cu.reportError('need to update folder ' + folder.name);
           folder.updateFolder(aMsgWindow);
         }
       }
@@ -171,14 +170,6 @@ FemlIncomingServerOverride.prototype =
   {
     return this._msgStore;
   }
-
- /* get rootFolder()
-  {
-    Cu.import("resource://feml/twitterFolder.jsm");
-    Cu.reportError("folder import success");
-    TwitterFolder.call(this);
-    return TwitterFolder.rootFolder;
-  }*/
 }
 
 // json pretty print from http://stackoverflow.com/questions/130404/javascript-data-formatting-pretty-printer
